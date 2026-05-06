@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Attempt Logs</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        td, th {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .failed {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Attempt Logs</h1>
+
+    <h3 class="alert">Failed Attempts: {{ failed_count }}</h3>
+
+    {% if brute_force_detected %}
+        <h2 class="alert">⚠️ Brute Force Activity Detected!</h2>
+    {% endif %}
+
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>IP Address</th>
+            <th>Timestamp</th>
+        </tr>
+
+        {% for log in logs %}
+        <tr>
+            <td>{{ log[0] }}</td>
+
+            {% if log[1] == 1 %}
+                <td class="success">Success</td>
+            {% else %}
+                <td class="failed">Failed</td>
+            {% endif %}
+
+            <td>{{ log[2] }}</td>
+            <td>{{ log[3] }}</td>
+            <td>{{ log[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+
+    <a href="/dashboard">Back to Dashboard</a>
+    <br><br>
+    <a href="/logout">Logout</a>
+</body>
+</html>
