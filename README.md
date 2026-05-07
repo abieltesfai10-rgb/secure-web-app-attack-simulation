@@ -102,23 +102,23 @@ http://127.0.0.1:5000
 
 `Python` `Flask` `SQLite` `bcrypt` `SQL Injection` `Authentication Security` `Session Management` `Access Control` `Brute-Force Mitigation` `Security Logging` `OWASP Top 10` `Burp Suite`
 
-## Screenshots
-
-### Admin login
-![Admin login table](screenshot-admin-table.png)
-
-### Locked out of account
-![Locked out of account](screenshot-locked-account.png)
-
-### Password hashing
-![Password hashing](screenshot-hashing.png)
-
-### Redirect to login
-![Redirect to login](screenshot-redirect.png)
-
-### Security Logs (SIEM-Style Monitoring)
-![Security Logs](screenshot-logs.png)
-
 ## Key Takeaway
 
 This project demonstrates not just how vulnerabilities are exploited, but how they are prevented, monitored, and detected in a real-world application — replicating the full workflow of an application security engagement.
+
+## Screenshots
+
+### Admin login
+![Admin login table](Admin-login-table.png)
+
+### Locked account
+![Locked account](Locked-account.png)
+
+### Password hashing
+![Password hashing](Password-hashing.png)
+
+### Redirect login
+![Redirect nlogin](Redirect-login.png)
+
+### Security Logs 
+![SIEM Log](SIEM-log.png)
