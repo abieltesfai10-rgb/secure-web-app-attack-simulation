@@ -1,105 +1,107 @@
-Project Overview
+# Secure Web App — Attack & Defense Simulation
 
-This application was built to demonstrate core Application Security (AppSec) principles:
+A hands-on Application Security project demonstrating how common web vulnerabilities are exploited and remediated. Built with Python and Flask, this app simulates a real penetration testing engagement: identify the vulnerability, exploit it, fix it, and verify the fix.
 
-Identify and exploit a vulnerability (SQL Injection)
-Remediate the vulnerability using secure coding practices
-Implement authentication security controls
-Add detection mechanisms (SIEM-style logging and alerting)
-⚠️ Vulnerability Demonstrated
-SQL Injection (Authentication Bypass)
+## Vulnerabilities Demonstrated
 
-The initial version of the application used unsafe string-based SQL queries:
+| Vulnerability | CWE | Status |
+|---|---|---|
+| SQL Injection (Authentication Bypass) | CWE-89 | ✅ Exploited & Remediated |
+| Brute-Force Attack | CWE-307 | ✅ Detected & Mitigated |
+| Plaintext Password Storage | CWE-256 | ✅ Fixed with bcrypt |
+| Insecure Session Handling | CWE-384 | ✅ Fixed |
+| Missing Access Controls | CWE-284 | ✅ Fixed |
 
-SELECT * FROM users WHERE username = 'input' AND password = 'input'
+## Attack Walkthrough
 
-This allowed authentication bypass using payloads such as:
+### SQL Injection — Authentication Bypass
 
-admin' OR '1'='1' --
-🔧 Security Fixes Implemented
-✅ Parameterized Queries
+The initial vulnerable query accepted raw user input:
 
-Prevented SQL injection by ensuring user input is treated strictly as data.
+```python
+# VULNERABLE — string concatenation
+query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
+```
 
-🔐 Password Hashing (bcrypt)
-Eliminated plaintext password storage
-Implemented secure password verification
-🔑 Session-Based Authentication
-Secure login session handling
-Protected routes (dashboard access control)
-Logout functionality
-🚫 Account Lockout
-Locks account after 5 failed login attempts
-Prevents brute-force attacks
-📊 Detection & Monitoring (SIEM-Style)
-📝 Login Attempt Logging
+This allowed authentication bypass using the classic payload:
+Username: admin' OR '1'='1' --
+Password: anything
 
-All authentication events are logged with:
+### Remediation Applied
 
-Username
-Success / Failure
-Failure reason
-IP address
-Timestamp
-🚨 Brute-Force Detection
-Counts failed login attempts
-Triggers alert when threshold is exceeded
-⚠️ Brute Force Activity Detected!
-🔒 Admin-Only Log Access
-/logs endpoint restricted to admin users
-Prevents unauthorized access to sensitive security data
-🧠 Skills Demonstrated
-Flask Web Development
-Secure Authentication Design
-SQL Injection Exploitation & Remediation
-Password Hashing (bcrypt)
-Session Management
-Access Control
-Brute-Force Mitigation
-Security Logging & Monitoring
-Basic SIEM Detection Logic
-🖥️ Tech Stack
-Python
-Flask
-SQLite
-bcrypt
-📁 Project Structure
+```python
+# SECURE — parameterized query
+cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+```
+
+Input is treated strictly as data, never as executable SQL.
+
+## Security Controls Implemented
+
+**Password Security**
+- Passwords hashed using bcrypt — plaintext storage eliminated
+- Secure password verification on login
+
+**Session Management**
+- Session-based authentication with protected routes
+- Logout functionality clears session data
+- Dashboard access restricted to authenticated users
+
+**Brute-Force Protection**
+- Account lockout after 5 failed login attempts
+- Prevents automated credential stuffing attacks
+
+**Detection & Monitoring (SIEM-Style)**
+- All authentication events logged with: username, success/failure, failure reason, IP address, timestamp
+- Brute-force alert triggered when threshold exceeded
+- `/logs` endpoint restricted to admin users only
+
+## Tech Stack
+
+- **Backend:** Python, Flask
+- **Database:** SQLite
+- **Security:** bcrypt, parameterized queries, session controls
+- **Testing:** Burp Suite (HTTP interception & payload delivery)
+
+## Project Structure
 secure-web-app-attack-simulation/
-│
-├── app.py
-├── database.py
-├── users.db
-├── view_logs.py
-│
-├── templates/
-│   ├── login.html
-│   ├── dashboard.html
-│   └── logs.html
-▶️ How to Run
-1. Install dependencies
-pip install flask bcrypt
-2. Initialize database
-python database.py
-3. Run application
-python app.py
-4. Access in browser
-http://127.0.0.1:5000
-🔑 Test Credentials
-Username: admin
-Password: password123
-🧪 Testing Scenarios
-✅ Valid Login
-Successful authentication redirects to dashboard
-❌ Invalid Login
-Failed attempts tracked and displayed
-🔒 Account Lockout
-Account locks after 5 failed attempts
-🚫 SQL Injection Attempt
-admin' OR '1'='1' --
-Properly blocked
-📊 Log Monitoring
-View logs at:
-http://127.0.0.1:5000/logs
-📌 Key Takeaway
+├── app.py              # Main Flask application
+├── database.py         # DB setup and query logic
+├── view_logs.py        # Log viewer (admin only)
+└── templates/
+├── login.html
+├── dashboard.html
+└── logs.html
 
-This project demonstrates not just how vulnerabilities are exploited, but how they are prevented, monitored, and detected in a real-world application.
+## How to Run
+
+```bash
+# 1. Install dependencies
+pip install flask bcrypt
+
+# 2. Initialize the database
+python database.py
+
+# 3. Run the application
+python app.py
+
+# 4. Open in browser
+http://127.0.0.1:5000
+```
+
+## Testing Scenarios
+
+| Scenario | Steps | Expected Result |
+|---|---|---|
+| Valid login | Enter correct credentials | Redirects to dashboard |
+| SQL injection attempt | Username: `admin' OR '1'='1' --` | Blocked — parameterized query prevents bypass |
+| Brute-force | 5+ failed logins | Account locked |
+| Log access (non-admin) | Access `/logs` as regular user | Access denied |
+
+## Skills Demonstrated
+
+`Python` `Flask` `SQLite` `bcrypt` `SQL Injection` `Authentication Security` `Session Management` `Access Control` `Brute-Force Mitigation` `Security Logging` `OWASP Top 10` `Burp Suite`
+
+## Key Takeaway
+
+This project demonstrates not just how vulnerabilities are exploited, but how they are prevented, monitored, and detected in a real-world application — replicating the full workflow of an application security engagement.
