@@ -120,5 +120,5 @@ This project demonstrates not just how vulnerabilities are exploited, but how th
 ### Redirect login
 ![Redirect nlogin](Redirect-login.png)
 
-### Security Logs 
+### SIEM Log
 ![SIEM Log](SIEM-Log.png)
